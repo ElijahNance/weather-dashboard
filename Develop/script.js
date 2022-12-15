@@ -6,6 +6,7 @@ var apiKey = "37bd46a2ae3b6a2e1299059e96677f72";
 var cityInputEl = document.querySelector("#city-input");
 var cityGeoInfo = {};
 var cityWeatherInfo = {};
+var cityCurrWeatherInfo={};
 
 document.querySelector("#city-button").addEventListener("click" , function () {
     document.querySelector("#city-input").textContent="";
@@ -21,7 +22,9 @@ fetch(geoCodingUrl)
                 cityGeoInfo=data[0];
                 console.log(cityGeoInfo.lat, cityGeoInfo.lon);
 
-                var cityUrl = "http://api.openweathermap.org/data/2.5/forecast?lat=" + cityGeoInfo.lat + "&lon=" + cityGeoInfo.lon + "&appid=37bd46a2ae3b6a2e1299059e96677f72";
+                var cityUrl = "http://api.openweathermap.org/data/2.5/forecast?lat=" + cityGeoInfo.lat + "&lon=" + cityGeoInfo.lon + "&appid=37bd46a2ae3b6a2e1299059e96677f72&units=imperial";
+
+                var currUrl = "https://api.openweathermap.org/data/2.5/weather?lat=" + cityGeoInfo.lat + "&lon=" + cityGeoInfo.lon + "&appid=37bd46a2ae3b6a2e1299059e96677f72&units=imperial";
 
                 fetch(cityUrl)
                 .then(function (response) {
@@ -32,13 +35,42 @@ fetch(geoCodingUrl)
                             var fiveDayData=[];
                             fiveDayData=getFiveDayWeather(cityWeatherInfo);
                             console.log(fiveDayData);
+                            displayFiveDayWeather(fiveDayData);
                         });
                     }});
+
+                fetch(currUrl)
+                .then(function (response) {
+                    if(response.ok) {
+                        response.json().then(function (data) {
+                            console.log(data);
+                            cityCurrWeatherInfo = getCurrentWeather(data);
+                            console.log(cityCurrWeatherInfo);
+                            })
+                        }
+                    })
                         });
                     }        
     })
     
-})
+});
+
+var getCurrentWeather = function (weatherInfo) {
+
+    var date = new Date(weatherInfo.dt * 1000);
+    console.log(dayjs(date).format('MM/DD/YYYY'));
+
+    const dayData = {
+        date: weatherInfo.dt,
+        icon: weatherInfo.weather[0].icon,
+        temp: weatherInfo.main.temp,
+        wind: weatherInfo.wind.speed,
+        humidity: weatherInfo.main.humidity,
+    }
+
+    return dayData;
+
+}
 
 var getFiveDayWeather = function (weatherInfo) {
     
@@ -68,4 +100,25 @@ var getFiveDayWeather = function (weatherInfo) {
 
     return fiveDayData;
 
-};
+}
+
+
+var displayFiveDayWeather = function(fiveDayData) {
+    
+    console.log(document.readyState);
+
+    for(var i = 0; i < fiveDayData.length; i++){
+
+        document.getElementById("date" + (i + 1)).textContent=fiveDayData[i].date;
+        document.getElementById("icon" + (i + 1)).textContent=fiveDayData[i].icon;
+        document.getElementById("temp" + (i + 1)).textContent=fiveDayData[i].temp;
+
+    }
+}
+    
+//     // for(var i=0; i < fiveDayData.length; i++) {
+//     //     console.log(fiveDayData[i].date, fiveDayData[i].wind);
+//     // }
+// };
+
+// displayFiveDayWeather();
