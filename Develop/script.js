@@ -44,8 +44,10 @@ fetch(geoCodingUrl)
                     if(response.ok) {
                         response.json().then(function (data) {
                             console.log(data);
+                            var currDayData = [];
                             cityCurrWeatherInfo = getCurrentWeather(data);
                             console.log(cityCurrWeatherInfo);
+                            displaycurrDayWeather(cityCurrWeatherInfo);
                             })
                         }
                     })
@@ -57,6 +59,8 @@ fetch(geoCodingUrl)
 
 var getCurrentWeather = function (weatherInfo) {
 
+    var currDayData = [];
+
     var date = new Date(weatherInfo.dt * 1000);
     console.log(dayjs(date).format('MM/DD/YYYY'));
 
@@ -67,6 +71,9 @@ var getCurrentWeather = function (weatherInfo) {
         wind: weatherInfo.wind.speed,
         humidity: weatherInfo.main.humidity,
     }
+
+    currDayData.push(dayData);
+    console.log(currDayData);
 
     return dayData;
 
@@ -112,13 +119,17 @@ var displayFiveDayWeather = function(fiveDayData) {
         document.getElementById("date" + (i + 1)).textContent=fiveDayData[i].date;
         document.getElementById("icon" + (i + 1)).textContent=fiveDayData[i].icon;
         document.getElementById("temp" + (i + 1)).textContent=fiveDayData[i].temp;
+        document.getElementById("wind" + (i + 1)).textContent=fiveDayData[i].wind;
+        document.getElementById("humid" + (i + 1)).textContent=fiveDayData[i].humidity;
 
     }
 }
     
-//     // for(var i=0; i < fiveDayData.length; i++) {
-//     //     console.log(fiveDayData[i].date, fiveDayData[i].wind);
-//     // }
-// };
-
-// displayFiveDayWeather();
+var displaycurrDayWeather = function (currDayData) {
+    document.getElementById("currDay").textContent=currDayData.date;
+    document.getElementById("currIcon").textContent=currDayData.icon;
+    document.getElementById("currTemp").textContent=currDayData.temp;
+    document.getElementById("currWind").textContent=currDayData.wind;
+    document.getElementById("currHumid").textContent=currDayData.humidity;
+    
+}
