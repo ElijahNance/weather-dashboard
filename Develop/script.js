@@ -7,13 +7,14 @@ var cityInputEl = document.querySelector("#city-input");
 var cityGeoInfo = {};
 var cityWeatherInfo = {};
 var cityCurrWeatherInfo={};
+var recentSearch = [];
 
 document.querySelector("#city-button").addEventListener("click" , function () {
     document.querySelector("#city-input").textContent="";
     userInput = document.querySelector("#city-input").value.split(' ').join('_');
     console.log(userInput);
 
-    var geoCodingUrl = "http://api.openweathermap.org/geo/1.0/direct?q=" + userInput + "&limit=5&appid=37bd46a2ae3b6a2e1299059e96677f72";
+    var geoCodingUrl = "https://api.openweathermap.org/geo/1.0/direct?q=" + userInput + "&limit=5&appid=37bd46a2ae3b6a2e1299059e96677f72";
 
 fetch(geoCodingUrl)
     .then(function (response) {
@@ -22,7 +23,7 @@ fetch(geoCodingUrl)
                 cityGeoInfo=data[0];
                 console.log(cityGeoInfo.lat, cityGeoInfo.lon);
 
-                var cityUrl = "http://api.openweathermap.org/data/2.5/forecast?lat=" + cityGeoInfo.lat + "&lon=" + cityGeoInfo.lon + "&appid=37bd46a2ae3b6a2e1299059e96677f72&units=imperial";
+                var cityUrl = "https://api.openweathermap.org/data/2.5/forecast?lat=" + cityGeoInfo.lat + "&lon=" + cityGeoInfo.lon + "&appid=37bd46a2ae3b6a2e1299059e96677f72&units=imperial";
 
                 var currUrl = "https://api.openweathermap.org/data/2.5/weather?lat=" + cityGeoInfo.lat + "&lon=" + cityGeoInfo.lon + "&appid=37bd46a2ae3b6a2e1299059e96677f72&units=imperial";
 
@@ -51,6 +52,9 @@ fetch(geoCodingUrl)
                             })
                         }
                     })
+
+                localStorage.setItem("recent-search" , userInput);
+                displayRecent();
                         });
                     }        
     })
@@ -118,18 +122,33 @@ var displayFiveDayWeather = function(fiveDayData) {
 
         document.getElementById("date" + (i + 1)).textContent=fiveDayData[i].date;
         document.getElementById("icon" + (i + 1)).textContent=fiveDayData[i].icon;
-        document.getElementById("temp" + (i + 1)).textContent=fiveDayData[i].temp;
-        document.getElementById("wind" + (i + 1)).textContent=fiveDayData[i].wind;
-        document.getElementById("humid" + (i + 1)).textContent=fiveDayData[i].humidity;
+        document.getElementById("temp" + (i + 1)).textContent="Temperature: " + fiveDayData[i].temp;
+        document.getElementById("wind" + (i + 1)).textContent="Wind: " + fiveDayData[i].wind;
+        document.getElementById("humid" + (i + 1)).textContent="Humidity: " + fiveDayData[i].humidity;
 
     }
 }
     
 var displaycurrDayWeather = function (currDayData) {
-    document.getElementById("currDay").textContent=currDayData.date;
+    var displayUserInput = document.querySelector("#city-input").value
+
+    document.getElementById("currDay").textContent=displayUserInput + " " + currDayData.date;
     document.getElementById("currIcon").textContent=currDayData.icon;
-    document.getElementById("currTemp").textContent=currDayData.temp;
-    document.getElementById("currWind").textContent=currDayData.wind;
-    document.getElementById("currHumid").textContent=currDayData.humidity;
+    document.getElementById("currTemp").textContent="Temperature: " + currDayData.temp;
+    document.getElementById("currWind").textContent="Wind: " + currDayData.wind;
+    document.getElementById("currHumid").textContent="Humidity: " + currDayData.humidity;
     
 }
+
+var displayRecent = function () {
+    document.getElementById("recent").innerHTML = null;
+    recentSearch = localStorage.getItem('recent-search') || [];
+    for (i = 0; i < recentSearch.length; i++){
+
+        var li = document.createElement('li');
+        li.textContent = recentSearch[i];
+        document.getElementById('recent').appendChild(li);
+    }
+}
+
+displayRecent();

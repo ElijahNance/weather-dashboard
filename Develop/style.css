@@ -2,6 +2,18 @@ h1 {
     text-align: center;
 }
 
-/* #weather-container {
-    border: 5px solid;
-} */
+.card {
+    background-color: #d8f3dc;
+    height: 250px;
+}
+
+#city-input {
+    width: 150px;
+}
+
+#curr-weather {
+    margin-right: 400px;
+    margin-bottom: 50px;
+    border: solid 2px black;
+}
+
