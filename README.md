@@ -10,4 +10,4 @@
 This application retrieves weather data from any city that the user wants. It uses 3 weather api's to pull the specefic coordinates of the city and then fetches the weather data of that city. The results come back with current weather for the city and a 5 day forecast. Previous searches also get saved to the page and can be clicked to load that cities weather information.
 
 ## Visuals
-![screenshot](./Develop/weather.png)
+![screenshot](./Assets/weather.png)
