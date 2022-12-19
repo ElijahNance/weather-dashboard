@@ -3,7 +3,6 @@ h1 {
 }
 
 .card {
-    background-color: #d8f3dc;
     height: 250px;
 }
 
@@ -15,5 +14,13 @@ h1 {
     margin-right: 400px;
     margin-bottom: 50px;
     border: solid 2px black;
+}
+
+body {
+    background-color: #e6e8e6;
+}
+
+a {
+    color: black;
 }
 

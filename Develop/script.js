@@ -184,7 +184,7 @@ var displayRecent = function (cityName) {
     console.log("Current Stored Locations:", currStoredLocations, typeof(currStoredLocations));
 
     //See if we've been here before and if we have, just bail
-    if (!confirmRecentVisit(cityName, currStoredLocations)) {
+    if ((cityName.length > 0) && (!confirmRecentVisit(cityName, currStoredLocations))) {
         currStoredLocations.push(cityName);
         console.log("After Push", currStoredLocations);
         localStorage.setItem("recent-search" , JSON.stringify(currStoredLocations));
@@ -202,4 +202,4 @@ var displayRecent = function (cityName) {
     }
 }
 
-displayRecent('Charlotte');
+displayRecent("");
