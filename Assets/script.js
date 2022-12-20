@@ -22,7 +22,7 @@ async function FetchAndDisplayData(cityName) {
     }
 
     cityInputEl.textContent="";
-    console.log("Fetch Function:", userInput);
+    
 
     var geoCodingUrl = "https://api.openweathermap.org/geo/1.0/direct?q=" + userInput + "&limit=5&appid=37bd46a2ae3b6a2e1299059e96677f72";
 
@@ -34,7 +34,7 @@ fetch(geoCodingUrl)
         if(response.ok) {
             response.json().then(function (data) {
                 cityGeoInfo=data[0];
-                console.log(cityGeoInfo.lat, cityGeoInfo.lon);
+                
 
                 var cityUrl = "https://api.openweathermap.org/data/2.5/forecast?lat=" + cityGeoInfo.lat + "&lon=" + cityGeoInfo.lon + "&appid=37bd46a2ae3b6a2e1299059e96677f72&units=imperial";
 
@@ -45,10 +45,10 @@ fetch(geoCodingUrl)
                     if(response.ok) {
                         response.json().then(function (data) {
                             cityWeatherInfo = data;
-                            console.log(cityWeatherInfo);
+                            
                             var fiveDayData=[];
                             fiveDayData=getFiveDayWeather(cityWeatherInfo);
-                            console.log(fiveDayData);
+                            
                             displayFiveDayWeather(fiveDayData);
                         });
                     }});
@@ -57,10 +57,10 @@ fetch(geoCodingUrl)
                 .then(function (response) {
                     if(response.ok) {
                         response.json().then(function (data) {
-                            console.log(data);
+                            
                             var currDayData = [];
                             cityCurrWeatherInfo = getCurrentWeather(data);
-                            console.log(cityCurrWeatherInfo);
+                            
                             displaycurrDayWeather(cityCurrWeatherInfo, userInput);
                             })
                         }
@@ -77,7 +77,7 @@ var getCurrentWeather = function (weatherInfo) {
     var currDayData = [];
 
     var date = new Date(weatherInfo.dt * 1000);
-    console.log(dayjs(date).format('MM/DD/YYYY'));
+    
 
     const dayData = {
         date: weatherInfo.dt,
@@ -88,7 +88,7 @@ var getCurrentWeather = function (weatherInfo) {
     }
 
     currDayData.push(dayData);
-    console.log(currDayData);
+    
 
     return dayData;
 
@@ -127,7 +127,7 @@ var getFiveDayWeather = function (weatherInfo) {
 
 var displayFiveDayWeather = function(fiveDayData) {
     
-    console.log(document.readyState);
+    
 
     for(var i = 0; i < fiveDayData.length; i++){
 
@@ -160,7 +160,7 @@ var displaycurrDayWeather = function (currDayData, cityName) {
 var confirmRecentVisit = function (cityName, listOfRecentCities) {
 
     if(!Array.isArray(listOfRecentCities)) {
-        console.log("No array of cities passed to confirmRecentVisit");
+        
         return false;
     }
 
@@ -177,16 +177,16 @@ var confirmRecentVisit = function (cityName, listOfRecentCities) {
 }
 
 var displayRecent = function (cityName) {
-    console.log("Display City:", cityName);
+    
 
     var currStoredLocations = JSON.parse(localStorage.getItem('recent-search')) || [];
 
-    console.log("Current Stored Locations:", currStoredLocations, typeof(currStoredLocations));
+    
 
     //See if we've been here before and if we have, just bail
     if ((cityName.length > 0) && (!confirmRecentVisit(cityName, currStoredLocations))) {
         currStoredLocations.push(cityName);
-        console.log("After Push", currStoredLocations);
+        
         localStorage.setItem("recent-search" , JSON.stringify(currStoredLocations));
     }
 
@@ -195,7 +195,7 @@ var displayRecent = function (cityName) {
 
     for (i = 0; i < currStoredLocations.length; i++){
         var liveAnchor = "<a href=\"#\" onclick=\"FetchAndDisplayData('" + currStoredLocations[i] + "'); return false;\">" + currStoredLocations[i] + "</a>";
-        console.log(liveAnchor);
+        
         var li = document.createElement('li');
         li.innerHTML = liveAnchor;
         recentLocationList.appendChild(li);
